@@ -4,7 +4,7 @@ import logging
 from typing import List, Dict
 from exceptions import DiscuitAPIException
 from json import JSONDecodeError
-from models import Result
+from models import Result, Post, Posts
 
 class RestAdapter:
     def __init__(self, hostname: str = 'discuit.net/api', api_key: str = '', ssl_verify: bool = True,
@@ -108,7 +108,10 @@ class RestAdapter:
     def delete(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         return self._do(http_method='DELETE', endpoint=endpoint, ep_params=ep_params, data=data)
 
-discuitapi = RestAdapter(hostname= "discuit.net/api")
+'''discuitapi = RestAdapter(hostname= "discuit.net/api")
 test_params = {'communityId' : '17692e122def73f25bd757e0'}
+
 result = discuitapi.get("posts", ep_params=test_params)
-print(result.data)
+
+all_posts = Posts(**result.data)
+print(all_posts.posts[1]['body'])'''
