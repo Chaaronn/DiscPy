@@ -107,6 +107,25 @@ class RestAdapter:
     
     def delete(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         return self._do(http_method='DELETE', endpoint=endpoint, ep_params=ep_params, data=data)
+    
+    def fetch_data(self, url:str) -> bytes:
+        #GET URL 
+        http_method = 'GET'
+        try:
+            log_line = f"method={http_method}, url={url}"
+            self._logger.debug(msg=log_line)
+            response = requests.request(method=http_method, url=url, verify=self._ssl_verify)
+        except requests.exceptions.RequestException as e:
+            self._logger.error(msg=(str(e)))
+            raise DiscuitAPIException(str(e)) from e
+        
+        # If status_code in 200-299 range, return byte stream, otherwise raise exception
+        is_success = 299 >= response.status_code >= 200
+        log_line = f"success={is_success}, status_code={response.status_code}, message={response.reason}"
+        self._logger.debug(msg=log_line)
+        if not is_success:
+            raise DiscuitAPIException(response.reason)
+        return response.content
 
 '''discuitapi = RestAdapter(hostname= "discuit.net/api")
 test_params = {'communityId' : '17692e122def73f25bd757e0'}

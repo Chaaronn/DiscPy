@@ -19,9 +19,20 @@ class DiscuitAPI:
         posts = Posts(**result.data)
         return posts
     
+    def get_post_by_id(self, post_id: str) -> Posts:
+        # post ID should be the public ID
+        # currently broken, as models are weird
+        result = self._rest_adapter.get(endpoint=f'posts/{post_id}')
+        post = Posts(**result.data)
+        return post[0]
+
+    def fetch_link_data(self, link: Link):
+        link.data = self._rest_adapter.fetch_data(url=link.url)
+    
 
 api = DiscuitAPI()
 
-res = api.get_community_posts("17692e122def73f25bd757e0")
+#res = api.get_community_posts("177a1ae4ee883ca82b22d914")
+res = api.get_post_by_id("6yiiXeJt")
 
-print(res.posts[0])
+print(res)

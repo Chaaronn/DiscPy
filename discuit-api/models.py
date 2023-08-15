@@ -1,5 +1,7 @@
 from typing import Dict, List, Optional
 from datetime import datetime
+from exceptions import DiscuitAPIException
+import os
 
 class Result:
     def __init__(self, status_code: int, message: str = '', data: List[Dict] = None):
@@ -15,9 +17,23 @@ class Result:
         self.data = data if data else []
 
 class Link:
-    def __init__(self, url: str, hostname: str):
+    def __init__(self, url: str, hostname: str, data: bytes = bytes(), **kwargs):
         self.url = url                              # URL of the link
         self.hostname = hostname                    # Hostname from the link
+        self.data = data
+        self.__dict__.update(kwargs)
+
+    def save_to(self, path:str = './', file_name: str = ''):
+        if not self.data:
+            raise DiscuitAPIException("No data to save")
+        try:
+            save_file_name = file_name if file_name else self.url.split('/')[-1]
+            save_path = os.path.join(path, save_file_name)
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            with open(save_path, "wb") as f:
+                f.write(self.data)
+        except Exception as e:
+            raise DiscuitAPIException(str(e)) from e
 
 class Post:
     def __init__(self, id: str, type: str, public_id: str, user_id: str, username: str, 
@@ -58,9 +74,10 @@ class Post:
         self.__dict__.update(kwargs)
 
 class Posts:
-    def __init__(self, posts: List[Post], next: str):
+    def __init__(self, posts: List[Post], next: str, **kwargs):
         self.posts = posts                          # List of post objects
         self.next = next                            # ID for next set of comments
+        self.__dict__.update(kwargs)
 
 '''
 Post data model. 
