@@ -1,17 +1,20 @@
 import requests
 import requests.packages
+import logging
 from typing import List, Dict
 from exceptions import DiscuitAPIException
 from json import JSONDecodeError
 from models import Result
 
 class RestAdapter:
-    def __init__(self, hostname: str, api_key: str = '', ssl_verify: bool = True):
+    def __init__(self, hostname: str, api_key: str = '', ssl_verify: bool = True,
+                 logger: logging.Logger = None):
         self.url = "https://{}/".format(hostname)
-
         # save to private member variables
         self._api_key = api_key
         self._ssl_verify = ssl_verify
+        self._logger = logger or logging.getLogger(__name__)
+
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
 
@@ -19,20 +22,37 @@ class RestAdapter:
         full_url = self.url + endpoint
         # will be required for auth down the line
         headers = {}
+
+        log_line_pre = f"method={http_method}, url={full_url}. params={ep_params}"
+        log_line_post = ', '.join((log_line_pre, "success={}, status_code={}, messaage={}"))
+
         try:
+            self._logger.debug(msg=log_line_pre)
             response = requests.request(method=http_method, url=full_url, verify=self._ssl_verify, 
                                         headers=headers, params=ep_params, json=data)
+        
         except requests.exceptions.RequestException as e:
+            self._logger.error(msg=(str(e)))
             raise DiscuitAPIException("Request Failed") from e
 
         try:
             data = response.json()
+
         except (ValueError, JSONDecodeError) as e:
+            self._logger.error(msg=log_line_post.format(False, None, e))
             raise DiscuitAPIException("Bad JSON response") from e
 
-        if 299 >= response.status_code >= 200: # okay 
+        # check if reponse was successful
+        is_success = 299 >= response.status_code >= 200
+
+
+
+        if is_success: # okay 
             # return a result object
+            
             return Result(response.status_code, message=response.reason, data=data)
+        
+
         raise DiscuitAPIException(f"{response.status_code} :  {response.reason}")
 
 
