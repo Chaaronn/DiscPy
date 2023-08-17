@@ -55,7 +55,7 @@ class DiscuitAPI:
         posts = Posts(**result.data)
         return posts
     
-    def get_post_by_id(self, post_id: str) -> Posts:
+    def get_post_by_id(self, post_id: str) -> Post:
         """Get a Post object by Public ID
         Currently returns list of posts, even though its one.
 
@@ -153,9 +153,3 @@ class DiscuitAPI:
         pass
     
 
-api = DiscuitAPI()
-#1779da1086fb65b89c3407e3
-#res = api.get_community_posts("177a1ae4ee883ca82b22d914")
-#res = api.get_user_by_id("etherealreverie77")
-
-res = api.authenticate()
