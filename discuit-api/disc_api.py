@@ -1,4 +1,4 @@
-import logging, requests, re
+import logging, requests
 from rest_adapter import RestAdapter
 from models import *
 
@@ -151,5 +151,5 @@ class DiscuitAPI:
 
     def get_user_feed(self, username:str):
         pass
-    
 
+#res = api.get_community_posts(test_comm_id)        Returns diff community posts
