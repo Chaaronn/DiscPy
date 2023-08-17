@@ -1,6 +1,6 @@
 # DiscPy
 
-A wrapper for the Discuit API.
+A python wrapper for the Discuit API.
 
 Currently, only capable of returning existing information, as authentication is yet to be implemented.
 
