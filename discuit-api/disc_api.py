@@ -1,40 +1,36 @@
-import logging, requests
+import logging, requests, re
 from rest_adapter import RestAdapter
 from models import *
 
 class DiscuitAPI:
-    def __init__(self, hostname: str = 'discuit.net/api', api_key: str = '', ssl_verify: bool = True,
+    def __init__(self, hostname: str = 'discuit.net/api', ssl_verify: bool = True,
                  logger: logging.Logger = None):
         
-        self._rest_adapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+        self._rest_adapter = RestAdapter(hostname, ssl_verify, logger)
+        self._session = requests.Session()
 
-    def authenticate(self):
+    def authenticate(self, username:str, password:str):
         try:
-            result = requests.get('https://discuit.net/api/_initial')
+            result = self._session.get('https://discuit.net/api/_initial')
         except requests.exceptions.RequestException as e:
             raise DiscuitAPIException("Request for login headers failed") from e
 
         headers = {
             'Cookie' : result.headers['Set-Cookie'],
-            #'X-Csrf-Token' : result.headers['csrftoken'],
-            'Content-Type' : 'application/x-www-form-urlencoded'
+            'X-Csrf-Token' : result.headers['Csrf-Token'],
+            'Content-Type' : 'application/json'
         }
 
         data = {
-            'username' : 'catwith2rooks',
-            'password' : ''
+            'username' : username,
+            'password' : password
         }
 
         try:
-            response = requests.post('http://discuit.net/api/_login', 
-                                     headers=headers, data=data)
+            response = self._session.post('http://discuit.net/api/_login', 
+                                     headers=headers, json=data)
         except requests.exceptions.RequestException as e:
             raise DiscuitAPIException("Login request failed") from e
-        
-        print(response.status_code)
-
-
-        
     
     def get_all_posts(self) -> Posts:
         """Gets most recent posts, site-wide.
@@ -163,4 +159,3 @@ api = DiscuitAPI()
 #res = api.get_user_by_id("etherealreverie77")
 
 res = api.authenticate()
-print(res) 
