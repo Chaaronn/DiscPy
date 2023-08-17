@@ -28,12 +28,12 @@ api.get_all_posts()
 Returns a list of post objects (as seen on discuit.com/home)
 
 ```
-api.get_post_by_id()
+api.get_post_by_id(post_id)
 ```
 Returns a post object by public ID.
 
 ```
-api.get_post_comments()
+api.get_post_comments(post_id)
 ```
 Returns a list of comment objects by public post ID.
 
@@ -44,30 +44,30 @@ api.get_communites()
 Returns a list of all communities as community objects.
 
 ```
-api.get_community_by_id()
+api.get_community_by_id(id)
 ```
 Returns a community object by ID. 
 (TODO - add by name)
 
 ```
-api.get_community_rules()
+api.get_community_rules(community_id)
 ```
 Returns a list of Rule objects by community ID.
 
 ```
-api.get_community_mods()
+api.get_community_mods(community_id)
 ```
 Returns a list of User objects who moderate the community
 
 ```
-api.get_community_posts()
+api.get_community_posts(community_id)
 ```
 Returns a list of post objects by community ID
 
 ### User
 
 ```
-api.get_user_by_username()
+api.get_user_by_username(username)
 ```
 Returns a user object by username.
 
