@@ -94,60 +94,60 @@ class Image:
         self.__dict__.update(kwargs)
 
 class CommunityRule:
-    def __init__(self, id: int, rule: str, description: Optional[str], community_id: str, z_index: int, 
-                 created_by: str, created_at: datetime, **kwargs):
+    def __init__(self, id: int, rule: str, description: Optional[str], communityId: str, zIndex: int, 
+                 createdBy: str, createdAt: datetime, **kwargs):
         self.id = id                                # ID of rule
         self.rule = rule                            # The actual rule
         self.description = description              # Could be null
-        self.community_id = community_id            # ID of community its a rule in
-        self.z_index = z_index                      # Determines rule ordering
-        self.created_by = created_by                # User who created the rule
-        self.created_at = created_at                # When it was created
+        self.community_id = communityId             # ID of community its a rule in
+        self.z_index = zIndex                       # Determines rule ordering
+        self.created_by = createdBy                 # User who created the rule
+        self.created_at = createdAt                 # When it was created
         self.__dict__.update(kwargs)
 
 class User:
-    def __init__(self, id: str, username: str, email: None, email_confirmed_at: None, 
-                 about_me: str, points: int, is_admin: bool, no_posts: int, no_comments: int, 
-                 created_at: datetime, deleted_at: None, banned_at: None, is_banned: bool, 
-                 notifications_new_count: int, modding_list: List, **kwargs):
+    def __init__(self, id: str, username: str, email: None, emailConfirmedAt: None, 
+                 aboutMe: str, points: int, isAdmin: bool, noPosts: int, noComments: int, 
+                 createdAt: datetime, deletedAt: None, bannedAt: None, isBanned: bool, 
+                 notificationsNewCount: int, moddingList: List, **kwargs):
         self.id = id                                            # User ID
         self.username = username                                # Username
         self.email = email                                      # Can be null
-        self.email_confirmed_at = email_confirmed_at            # Can be null
-        self.about_me = about_me                                # About me description
+        self.email_confirmed_at = emailConfirmedAt              # Can be null
+        self.about_me = aboutMe                                 # About me description
         self.points = points                                    # Points?
-        self.is_admin = is_admin                                # If the User is a site admin
-        self.no_posts = no_posts                                # Number of posts made by user
-        self.no_comments = no_comments                          # Number of comments made by user
-        self.created_at = created_at                            # Datetime when the account was created
-        self.deleted_at = deleted_at                            # Datetime when it was deleted
-        self.banned_at = banned_at                              # Datetime when it was banned
-        self.is_banned = is_banned                              # If the user is banned
-        self.notifications_new_count = notifications_new_count  # Number of new notifications user has
-        self.modding_list = modding_list                        # List of communities the user mods
+        self.is_admin = isAdmin                                 # If the User is a site admin
+        self.no_posts = noPosts                                 # Number of posts made by user
+        self.no_comments = noComments                           # Number of comments made by user
+        self.created_at = createdAt                             # Datetime when the account was created
+        self.deleted_at = deletedAt                             # Datetime when it was deleted
+        self.banned_at = bannedAt                               # Datetime when it was banned
+        self.is_banned = isBanned                               # If the user is banned
+        self.notifications_new_count = notificationsNewCount    # Number of new notifications user has
+        self.modding_list = moddingList                         # List of communities the user mods
         self.__dict__.update(**kwargs)
 
 
 class Community:
-    def __init__(self, id: str, user_id: str, name: str, nsfw: bool, about: str, no_members: int, 
-                 pro_pic: Image, banner_image: Image, created_at: datetime, deleted_at: Optional[datetime], 
-                 user_joined: Optional[bool], user_mod: Optional[bool], mods: Optional[List[User]], 
-                 rules: Optional[List[CommunityRule]], reports_details: List[Dict], **kwargs):
+    def __init__(self, id: str, userId: str, name: str, nsfw: bool, about: str, noMembers: int, 
+                 proPic: Image, bannerImage: Dict, createdAt: datetime, deletedAt: Optional[datetime], 
+                 userJoined: Optional[bool], userMod: Optional[bool], mods: Optional[List[User]], 
+                 rules: Optional[List[CommunityRule]], ReportsDetails: List[Dict], **kwargs):
         self.id = id                                # Community ID
-        self.user_id = user_id                      # ID of user who created community
+        self.user_id = userId                       # ID of user who created community
         self.name = name                            # Community name (i.e., formula1, chess)
         self.nsfw = nsfw                            # If community is NSFW
         self.about = about                          # Description of communiity
-        self.no_members = no_members                # How many users have joined
-        self.pro_pic = pro_pic                      # Image object of the photo
-        self.banner_image = banner_image            # Image object
-        self.created_at = created_at                # Datetime the community was created
-        self.deleted_at = deleted_at                # Datetime it was deleted
-        self.user_joined = user_joined              # If the current AUTH user is subbed
-        self.user_mod = user_mod                    # If the current auth user is a mod
+        self.no_members = noMembers                 # How many users have joined
+        self.pro_pic = proPic                       # Image object of the photo
+        self.banner_image = bannerImage             # Image object
+        self.created_at = createdAt                 # Datetime the community was created
+        self.deleted_at = deletedAt                 # Datetime it was deleted
+        self.user_joined = userJoined               # If the current AUTH user is subbed
+        self.user_mod = userMod                     # If the current auth user is a mod
         self.mods = mods                            # List of users who are mods
         self.rules = rules                          # List of CommunityRules
-        self.reports_details = reports_details      # List of reports to the community
+        self.reports_details = ReportsDetails       # List of reports to the community
         self.__dict__.update(kwargs)
 
 class Comment:

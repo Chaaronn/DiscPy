@@ -1,6 +1,5 @@
 import logging
 from rest_adapter import RestAdapter
-from exceptions import DiscuitAPIException
 from models import *
 
 class DiscuitAPI:
@@ -45,8 +44,8 @@ class DiscuitAPI:
         # post ID should be the public ID
         # currently broken, as models are weird
         result = self._rest_adapter.get(endpoint=f'posts/{post_id}')
-        post = Posts(**result.data)
-        return post[0]
+        post = Post(**result.data)
+        return post
     
     def get_post_comments(self, post_id:str) -> Comments: 
         """Get comments on a post by Public ID
@@ -65,40 +64,74 @@ class DiscuitAPI:
         link.data = self._rest_adapter.fetch_data(url=link.url)
 
     def get_communites(self) -> List[Community]:
-        """Gets all communities, sitewide
+        """Returns a list of all communities, sitewide
 
         Returns:
             List[Community]: A list of community objects
         """
         results = self._rest_adapter.get(endpoint='communities')
-        # this doesnt work for adding to list, result not iterable
-        # cahnged, now missing positional args for Community class??
-        communities = []
-        for result in results.data:
-            communities.append(Community(**result))
-        return communities
+        communities_list = [Community(**datum) for datum in results.data]
+        return communities_list
 
     def get_community_by_id(self, community_id: str) -> Community:
+        """Returns a community object by ID.
+
+        Args:
+            community_id (str): The community ID.
+
+        Returns:
+            Community: A Community object
+        """
         result = self._rest_adapter.get(endpoint=f'communities/{community_id}')
         community = Community(**result.data)
         return community
 
-    def get_community_rules(self, community_id: str):
-        pass
+    def get_community_rules(self, community_id: str) -> List[CommunityRule]:
+        """Returns a list of CommunityRule objects for the community ID
 
-    def get_community_mods(self, community_id: str):
-        pass
+        Args:
+            community_id (str): ID of community.
 
-    def get_user_by_id(self, user_id: str):
-        pass
+        Returns:
+            List[CommunityRule]: A List of CommunityRule objects
+        """
+        result = self._rest_adapter.get(endpoint=f"communities/{community_id}/rules")
+        rules_list = [CommunityRule(**datum) for datum in result.data]
+        return rules_list
 
-    def get_user_by_username(self, username:str):
+    def get_community_mods(self, community_id: str) -> List[User]:
+        """Returns a list of User objects that moderate the community.
+
+        Args:
+            community_id (str): Community ID
+
+        Returns:
+            List[User]: A list of user objects.
+        """
+        result = self._rest_adapter.get(endpoint=f"communities/{community_id}/mods")
+        mods_list = [User(**datum) for datum in result.data]
+        return mods_list
+
+    def get_user_by_username(self, username: str) -> User:
+        """Returns a User object by username
+
+        Args:
+            username (str): the username of the user
+
+        Returns:
+            User: A User object
+        """
+        result = self._rest_adapter.get(endpoint=f"users/{username}")
+        user = User(**result.data)
+        return user
+
+    def get_user_feed(self, username:str):
         pass
     
 
 api = DiscuitAPI()
-
+#1779da1086fb65b89c3407e3
 #res = api.get_community_posts("177a1ae4ee883ca82b22d914")
-res = api.get_community_by_id('177a1ae4ee883ca82b22d914')
+res = api.get_user_by_id("etherealreverie77")
 
-print(res) 
+print(res.username) 
