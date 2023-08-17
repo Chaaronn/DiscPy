@@ -2,6 +2,8 @@
 
 A wrapper for the Discuit API.
 
+Currently, only capable of returning existing information, as authentication is yet to be implemented.
+
 ## Basic usage:
 ```
 from DiscPy.disc_api import DiscuitAPI 
