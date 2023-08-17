@@ -1,4 +1,4 @@
-import logging
+import logging, requests
 from rest_adapter import RestAdapter
 from models import *
 
@@ -7,6 +7,34 @@ class DiscuitAPI:
                  logger: logging.Logger = None):
         
         self._rest_adapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+
+    def authenticate(self):
+        try:
+            result = requests.get('https://discuit.net/api/_initial')
+        except requests.exceptions.RequestException as e:
+            raise DiscuitAPIException("Request for login headers failed") from e
+
+        headers = {
+            'Cookie' : result.headers['Set-Cookie'],
+            #'X-Csrf-Token' : result.headers['csrftoken'],
+            'Content-Type' : 'application/x-www-form-urlencoded'
+        }
+
+        data = {
+            'username' : 'catwith2rooks',
+            'password' : ''
+        }
+
+        try:
+            response = requests.post('http://discuit.net/api/_login', 
+                                     headers=headers, data=data)
+        except requests.exceptions.RequestException as e:
+            raise DiscuitAPIException("Login request failed") from e
+        
+        print(response.status_code)
+
+
+        
     
     def get_all_posts(self) -> Posts:
         """Gets most recent posts, site-wide.
@@ -132,6 +160,7 @@ class DiscuitAPI:
 api = DiscuitAPI()
 #1779da1086fb65b89c3407e3
 #res = api.get_community_posts("177a1ae4ee883ca82b22d914")
-res = api.get_user_by_id("etherealreverie77")
+#res = api.get_user_by_id("etherealreverie77")
 
-print(res.username) 
+res = api.authenticate()
+print(res) 

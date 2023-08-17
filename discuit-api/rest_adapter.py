@@ -126,11 +126,3 @@ class RestAdapter:
         if not is_success:
             raise DiscuitAPIException(response.reason)
         return response.content
-
-'''discuitapi = RestAdapter(hostname= "discuit.net/api")
-test_params = {'communityId' : '17692e122def73f25bd757e0'}
-
-result = discuitapi.get("posts", ep_params=test_params)
-
-all_posts = Posts(**result.data)
-print(all_posts.posts[1]['body'])'''
