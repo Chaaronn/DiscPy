@@ -1,4 +1,4 @@
-# BiscuitWrapper
+# DiscPy
 
 A wrapper for the Discuit API.
 
