@@ -7,7 +7,7 @@ from json import JSONDecodeError
 from models import Result, Post, Posts
 
 class RestAdapter:
-    def __init__(self, hostname: str = 'discuit.net/api', api_key: str = '', ssl_verify: bool = True,
+    def __init__(self, hostname: str = 'discuit.net/api', ssl_verify: bool = True,
                  logger: logging.Logger = None):
         """Constructor for RestAdapater
 
@@ -19,7 +19,6 @@ class RestAdapter:
         """
         self.url = "https://{}/".format(hostname)
         # save to private member variables
-        self._api_key = api_key
         self._ssl_verify = ssl_verify
         self._logger = logger or logging.getLogger(__name__)
 
