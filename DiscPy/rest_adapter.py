@@ -22,6 +22,8 @@ class RestAdapter:
         self._ssl_verify = ssl_verify
         self._logger = logger or logging.getLogger(__name__)
 
+        self.session = requests.session()
+
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
 
@@ -53,7 +55,7 @@ class RestAdapter:
         # Log HTTP params and perform HTTP request, catching and re-raising execeptions.
         try:
             self._logger.debug(msg=log_line_pre)
-            response = requests.request(method=http_method, url=full_url, verify=self._ssl_verify, 
+            response = self.session.request(method=http_method, url=full_url, verify=self._ssl_verify, 
                                         headers=headers, params=ep_params, json=data)
         
         except requests.exceptions.RequestException as e:
@@ -113,7 +115,7 @@ class RestAdapter:
         try:
             log_line = f"method={http_method}, url={url}"
             self._logger.debug(msg=log_line)
-            response = requests.request(method=http_method, url=url, verify=self._ssl_verify)
+            response = self.session.request(method=http_method, url=url, verify=self._ssl_verify)
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
             raise DiscuitAPIException(str(e)) from e
