@@ -267,15 +267,3 @@ class DiscuitAPI:
         result = self._rest_adapter.post(endpoint="_commentVote", data=data)
 
         return result.status_code
-    
-    
-api = DiscuitAPI()
-
-api.authenticate("catwith2rooks", "041018LochNess;")
-
-test_community_id = '17692e122def73f25bd757e0'
-test_post_id = 'Fxf8Uy_4'
-test_user = 'catwith2rooks'
-
-result = api.get_auth_user()
-print()
