@@ -23,7 +23,11 @@ Clone the repo and import disc_api.py
 from DiscPy.disc_api import DiscuitAPI 
 api = DiscuitAPI()
 api.get_all_posts()
-````
+```
+or if cloned:
+```
+from disc_api import DiscuitAPI
+```
 
 
 ## **Methods:**
