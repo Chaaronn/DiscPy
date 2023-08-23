@@ -1,4 +1,4 @@
-import logging, requests
+import logging
 from rest_adapter import RestAdapter
 from models import *
 
@@ -138,3 +138,59 @@ class DiscuitAPI:
         result = self._rest_adapter.get(endpoint="_user")
         user = User(**result.data)
         return user
+
+    def create_post(self, type: str, title: str, community:str, 
+                    body:str = None, url:str = None) -> Post:
+        """Creates a post with the supplied args. Returns the Post object.
+
+        Args:
+            type (str): Type of post. One of "text", "image", "link".
+            title (str): Title of the post
+            community (str): Community to post in
+            body (str, optional): Body of the post. Required for text posts. Defaults to None.
+            url (str, optional): URL for the post. Required for image and link posts. Defaults to None.
+
+        Returns:
+            Post: A Post object of the created post.
+        """
+        data = {
+            "type" : type,
+            "title" : title,
+            "body" : body,
+            "community" : community,
+            "url" : url
+        }
+        result = self._rest_adapter.post(endpoint="posts", data=data)
+
+        post = Post(**result.data)
+        return post
+    
+    def update_post(self, post_id:str, title:str = None, body:str = None):
+
+        data = {
+            "title" : title,
+            "body" : body
+        }
+
+        # This is actually a PUT not POST, need to write method
+        result = self._rest_adapter.post(endpoint=f"posts/{post_id}", data=data)
+    
+    def delete_post(self, post_id:str, delete_as: str = "Normal", delete_content:bool = True):
+        """Deletes the post by public post_id.
+
+        Args:
+            post_id (str): Public Post ID
+            delete_as (str, optional): One of 'normal', 'mods', 'admins'. Defaults to Normal.
+            delete_content (bool, optional): If True, the body will also be deleted. Defaults to True.
+
+        Returns:
+            _type_: _description_
+        """
+        params = {
+            "deleteAs" : delete_as,
+            "deleteContent" : delete_content
+        }
+
+        result = self._rest_adapter.delete(endpoint=f"posts/{post_id}", ep_params=params)
+
+        return Post(**result.data)
