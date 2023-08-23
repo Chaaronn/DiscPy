@@ -139,10 +139,11 @@ class RestAdapter:
             raise DiscuitAPIException("Request for login headers failed") from e
 
         self._auth_headers = {
-            'Cookie' : result.headers['Set-Cookie'].split(';')[0],
+            'Cookie' : result.headers['Set-Cookie'],
             'X-Csrf-Token' : result.headers['Csrf-Token'],
             'Content-Type' : 'application/json'
         }
+        print(self._auth_headers)
 
         data = {
             'username' : username,

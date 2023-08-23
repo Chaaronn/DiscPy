@@ -150,7 +150,7 @@ class DiscuitAPI:
         Args:
             type (str): Type of post. One of "text", "image", "link".
             title (str): Title of the post
-            community (str): Community to post in
+            community (str): Community to post in (common, i.e. "General")
             body (str, optional): Body of the post. Required for text posts. Defaults to None.
             url (str, optional): URL for the post. Required for image and link posts. Defaults to None.
 
