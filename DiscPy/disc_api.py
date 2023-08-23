@@ -194,3 +194,63 @@ class DiscuitAPI:
         result = self._rest_adapter.delete(endpoint=f"posts/{post_id}", ep_params=params)
 
         return Post(**result.data)
+    
+    def vote_post(self, post_id:str, upvote:bool):
+        """Votes on a post by post ID.
+
+        Args:
+            post_id (str): ID of the post (not public ID)
+            upvote (bool): If True, up, if False, down
+
+        Returns:
+            Status Code: The status code of the request.
+        """
+        params = {
+            "postId" : post_id,
+            "up" : upvote
+        }
+
+        result = self._rest_adapter.post(endpoint="_postVote", data=params)
+
+        return result.status_code
+
+    def create_comment(self, post_id:str, body:str, parent_comment_id:str = None):
+
+        data = {
+            "parentCommentID" : parent_comment_id,
+            "body" : body
+        }
+
+        result = self._rest_adapter.post(endpoint=f"posts/{post_id}/comments", data=data)
+
+        # Need to modify Comment model, as result.data apparently doesnt give all info
+        return result.status_code
+    
+    def delete_comment(self, post_id:str, comment_id:str, delete_as:str = 'Normal'):
+
+        data = {
+            "deleteAs" : delete_as
+        }
+
+        result = self._rest_adapter.delete(endpoint=f"posts/{post_id}/comments/{comment_id}", data=data)
+
+        return result.status_code
+    
+    def vote_comment(self, comment_id:str, upvote:bool):
+        """Votes on a comment by comment ID.
+
+        Args:
+            comment_id (str): ID of the post (not public ID)
+            upvote (bool): If True, up, if False, down
+
+        Returns:
+            Status Code: The status code of the request.
+        """
+        params = {
+            "commentId" : comment_id,
+            "up" : upvote
+        }
+
+        result = self._rest_adapter.post(endpoint="_commentVote", data=params)
+
+        return result.status_code
