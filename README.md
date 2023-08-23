@@ -2,6 +2,8 @@
 
 A python wrapper for the Discuit API.
 
+Thanks to Snocrash and headzoo for sorting out authentication.
+
 
 ## Installation
 ```
