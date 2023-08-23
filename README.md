@@ -2,7 +2,11 @@
 
 A python wrapper for the Discuit API.
 
-Currently, only capable of returning existing information, as authentication is yet to be implemented.
+
+## Installation
+```
+pip install DiscPy
+```
 
 ## Basic usage:
 ```
@@ -18,7 +22,7 @@ api.get_all_posts()
 ```
 api.authenticate(username, password)
 ```
-Currently not working.
+Will need to be called prior to any POST/PUT/DELETE methods.
 
 
 ### Posts
@@ -26,16 +30,54 @@ Currently not working.
 api.get_all_posts()
 ```
 Returns a list of post objects (as seen on discuit.com/home)
+GET request.
 
 ```
 api.get_post_by_id(post_id)
 ```
 Returns a post object by public ID.
+GET request.
 
 ```
 api.get_post_comments(post_id)
 ```
 Returns a list of comment objects by public post ID.
+GET request.
+
+```
+api.create_post(type, title, community, body, link)
+```
+Creates a post of given type in given community, with title, body and link.
+Type should be either text, image, or link.
+Community is the direct name, i.e. "General" (case sensitive)
+POST request.
+
+```
+api.delete_post(post_id, delete_as, delete_content)
+```
+Deletes a post by ID. Delete_as is relevant for moderators, otherwise leave it be. 
+Delete_content checks if the body should be deleted as well as the post (defaults to True)
+DELETE request.
+
+```
+api.vote_post(post_id, upvote)
+```
+Votes on a post by ID (not public ID). If Upvote == True, it will be up. 
+POST request.
+
+### Comments
+
+```
+api.create_comment(post_id, body, parent_comment_id)
+```
+Creates a comment on given post. If parent_comment_id is supplied, it will be a reply.
+POST request.
+
+```
+api.delete_comment(post_id, comment_id, delete_as)
+```
+Deletes a comment on a post by ID's. delete_as is the same as for delete_post.
+DELETE request.
 
 ### Community
 ```
@@ -70,6 +112,11 @@ Returns a list of post objects by community ID
 api.get_user_by_username(username)
 ```
 Returns a user object by username.
+
+```
+api.get_auth_user
+```
+Returns a User object for the currently authenticated user.
 
 ## Objects
 
