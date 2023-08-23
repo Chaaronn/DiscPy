@@ -175,7 +175,7 @@ class DiscuitAPI:
         # This is actually a PUT not POST, need to write method
         result = self._rest_adapter.post(endpoint=f"posts/{post_id}", data=data)
     
-    def delete_post(self, post_id:str, delete_as: str = "Normal", delete_content:bool = True):
+    def delete_post(self, post_id:str, delete_as: str = "Normal", delete_content:bool = True) -> Post:
         """Deletes the post by public post_id.
 
         Args:
@@ -184,7 +184,7 @@ class DiscuitAPI:
             delete_content (bool, optional): If True, the body will also be deleted. Defaults to True.
 
         Returns:
-            _type_: _description_
+            Post: Post object of deleted post.
         """
         params = {
             "deleteAs" : delete_as,
