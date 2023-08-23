@@ -1,10 +1,10 @@
 import requests
 import requests.packages
 import logging
-from typing import List, Dict
+from typing import Dict
 from exceptions import DiscuitAPIException
 from json import JSONDecodeError
-from models import Result, Post, Posts
+from models import Result
 
 class RestAdapter:
     def __init__(self, hostname: str = 'discuit.net/api', ssl_verify: bool = True,
@@ -143,7 +143,6 @@ class RestAdapter:
             'X-Csrf-Token' : result.headers['Csrf-Token'],
             'Content-Type' : 'application/json'
         }
-        print(self._auth_headers)
 
         data = {
             'username' : username,
