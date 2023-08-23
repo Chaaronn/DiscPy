@@ -7,30 +7,10 @@ class DiscuitAPI:
                  logger: logging.Logger = None):
         
         self._rest_adapter = RestAdapter(hostname, ssl_verify, logger)
-        self._session = requests.Session()
 
     def authenticate(self, username:str, password:str):
-        try:
-            result = self._session.get('https://discuit.net/api/_initial')
-        except requests.exceptions.RequestException as e:
-            raise DiscuitAPIException("Request for login headers failed") from e
-
-        headers = {
-            'Cookie' : result.headers['Set-Cookie'],
-            'X-Csrf-Token' : result.headers['Csrf-Token'],
-            'Content-Type' : 'application/json'
-        }
-
-        data = {
-            'username' : username,
-            'password' : password
-        }
-
-        try:
-            response = self._session.post('http://discuit.net/api/_login', 
-                                     headers=headers, json=data)
-        except requests.exceptions.RequestException as e:
-            raise DiscuitAPIException("Login request failed") from e
+        result = self._rest_adapter.authenticate(username,password)
+        return result
     
     def get_all_posts(self) -> Posts:
         """Gets most recent posts, site-wide.
@@ -149,7 +129,12 @@ class DiscuitAPI:
         user = User(**result.data)
         return user
 
-    def get_user_feed(self, username:str):
-        pass
+    def get_auth_user(self):
+        """Returns a User object for the currently authenticated user.
 
-#res = api.get_community_posts(test_comm_id)        Returns diff community posts
+        Returns:
+            _type_: _description_
+        """
+        result = self._rest_adapter.get(endpoint="_user")
+        user = User(**result.data)
+        return user

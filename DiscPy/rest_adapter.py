@@ -22,7 +22,7 @@ class RestAdapter:
         self._ssl_verify = ssl_verify
         self._logger = logger or logging.getLogger(__name__)
 
-        self.session = requests.session()
+        self._session = requests.session()
 
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
@@ -55,7 +55,7 @@ class RestAdapter:
         # Log HTTP params and perform HTTP request, catching and re-raising execeptions.
         try:
             self._logger.debug(msg=log_line_pre)
-            response = self.session.request(method=http_method, url=full_url, verify=self._ssl_verify, 
+            response = self._session.request(method=http_method, url=full_url, verify=self._ssl_verify, 
                                         headers=headers, params=ep_params, json=data)
         
         except requests.exceptions.RequestException as e:
@@ -115,7 +115,7 @@ class RestAdapter:
         try:
             log_line = f"method={http_method}, url={url}"
             self._logger.debug(msg=log_line)
-            response = self.session.request(method=http_method, url=url, verify=self._ssl_verify)
+            response = self._session.request(method=http_method, url=url, verify=self._ssl_verify)
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
             raise DiscuitAPIException(str(e)) from e
@@ -127,3 +127,35 @@ class RestAdapter:
         if not is_success:
             raise DiscuitAPIException(response.reason)
         return response.content
+
+    def authenticate(self, username:str, password:str):
+        try:
+            result = self._session.get('https://discuit.net/api/_initial')
+        except requests.exceptions.RequestException as e:
+            raise DiscuitAPIException("Request for login headers failed") from e
+
+        cookie_str = result.headers['Set-Cookie'].split(';')[0]
+        headers = {
+            'Cookie' : cookie_str,
+            'X-Csrf-Token' : result.headers['Csrf-Token'],
+            'Content-Type' : 'application/json'
+        }
+
+        data = {
+            'username' : username,
+            'password' : password
+        }
+
+        try:
+            response = self._session.post('https://discuit.net/api/_login', 
+                                     headers=headers, json=data)
+            print('Auth successful')
+        except requests.exceptions.RequestException as e:
+            raise DiscuitAPIException("Request failed for login route") from e
+        
+        is_success = 299 > response.status_code >= 200
+
+        if not is_success:
+            raise DiscuitAPIException("Autherisation failed (check user/pass)")
+        else:
+            return response.status_code
