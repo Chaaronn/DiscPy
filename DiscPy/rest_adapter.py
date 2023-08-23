@@ -24,6 +24,8 @@ class RestAdapter:
 
         self._session = requests.session()
 
+        self._auth_headers = {}
+
         if not ssl_verify:
             requests.packages.urllib3.disable_warnings()
 
@@ -46,8 +48,7 @@ class RestAdapter:
         """
 
         full_url = self.url + endpoint
-        # will be required for auth down the line
-        headers = {}
+        
 
         log_line_pre = f"method={http_method}, url={full_url}. params={ep_params}"
         log_line_post = ', '.join((log_line_pre, "success={}, status_code={}, messaage={}"))
@@ -56,7 +57,7 @@ class RestAdapter:
         try:
             self._logger.debug(msg=log_line_pre)
             response = self._session.request(method=http_method, url=full_url, verify=self._ssl_verify, 
-                                        headers=headers, params=ep_params, json=data)
+                                        headers=self._auth_headers, params=ep_params, json=data)
         
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
@@ -135,7 +136,7 @@ class RestAdapter:
             raise DiscuitAPIException("Request for login headers failed") from e
 
         cookie_str = result.headers['Set-Cookie'].split(';')[0]
-        headers = {
+        self._auth_headers = {
             'Cookie' : cookie_str,
             'X-Csrf-Token' : result.headers['Csrf-Token'],
             'Content-Type' : 'application/json'
@@ -148,7 +149,7 @@ class RestAdapter:
 
         try:
             response = self._session.post('https://discuit.net/api/_login', 
-                                     headers=headers, json=data)
+                                     headers=self._auth_headers, json=data)
             print('Auth successful')
         except requests.exceptions.RequestException as e:
             raise DiscuitAPIException("Request failed for login route") from e
