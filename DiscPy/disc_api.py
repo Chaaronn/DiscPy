@@ -169,15 +169,14 @@ class DiscuitAPI:
         post = Post(**result.data)
         return post
     
-    def update_post(self, post_id:str, title:str = None, body:str = None):
+    def update_post(self, post_id:str, title:str = None, body:str = None, should_lock:bool = False):
 
         data = {
             "title" : title,
             "body" : body
         }
 
-        # This is actually a PUT not POST, need to write method
-        result = self._rest_adapter.post(endpoint=f"posts/{post_id}", data=data)
+        result = self._rest_adapter.put(endpoint=f"posts/{post_id}", data=data)
     
     def delete_post(self, post_id:str, delete_as: str = "Normal", delete_content:bool = True) -> Post:
         """Deletes the post by public post_id.
@@ -219,7 +218,16 @@ class DiscuitAPI:
         return result.status_code
 
     def create_comment(self, post_id:str, body:str, parent_comment_id:str = None):
+        """Creates a comment on given Post ID. If Parent comment ID is supplied, it will be a reply
 
+        Args:
+            post_id (str): the ID of the Post
+            body (str): Body of the comment
+            parent_comment_id (str, optional): ID of the comment to reply to. Defaults to None.
+
+        Returns:
+            Comment: Comment object of created comment.
+        """
         data = {
             "parentCommentID" : parent_comment_id,
             "body" : body
@@ -228,7 +236,8 @@ class DiscuitAPI:
         result = self._rest_adapter.post(endpoint=f"posts/{post_id}/comments", data=data)
 
         # Need to modify Comment model, as result.data apparently doesnt give all info
-        return result.status_code
+        comment = Comment(**result.data)
+        return comment
     
     def delete_comment(self, post_id:str, comment_id:str, delete_as:str = 'Normal'):
 
@@ -250,11 +259,23 @@ class DiscuitAPI:
         Returns:
             Status Code: The status code of the request.
         """
-        params = {
+        data = {
             "commentId" : comment_id,
             "up" : upvote
         }
 
-        result = self._rest_adapter.post(endpoint="_commentVote", data=params)
+        result = self._rest_adapter.post(endpoint="_commentVote", data=data)
 
         return result.status_code
+    
+    
+api = DiscuitAPI()
+
+api.authenticate("catwith2rooks", "041018LochNess;")
+
+test_community_id = '17692e122def73f25bd757e0'
+test_post_id = 'Fxf8Uy_4'
+test_user = 'catwith2rooks'
+
+result = api.get_auth_user()
+print()

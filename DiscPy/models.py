@@ -151,36 +151,36 @@ class Community:
         self.__dict__.update(kwargs)
 
 class Comment:
-    def __init__(self, id: str, post_id: str, post_public_id: str, community_id: str, 
-                 community_name: str, user_id: str, username: str, user_group: str, 
-                 user_deleted: bool, parent_id: Optional[str], depth: int, no_replies: int, 
-                 no_replies_direct: int, ancestors: Optional[List[str]], body: str, 
-                 upvotes: int, downvotes: int, created_at: datetime, edited_at: Optional[datetime], 
-                 deleted_at: Optional[datetime], user_voted: Optional[bool], user_voted_up: Optional[bool], 
-                 post_deleted: bool, **kwargs):
+    def __init__(self, id: str, postId: str, postPublicId: str, communityId: str, 
+                 communityName: str, userId: str, username: str, userGroup: str, 
+                 userDeleted: bool, parentId: Optional[str], depth: int, noReplies: int, 
+                 noRepliesDirect: int, ancestors: Optional[List[str]], body: str, 
+                 upvotes: int, downvotes: int, createdAt: datetime, editedAt: Optional[datetime], 
+                 deletedAt: Optional[datetime], userVoted: Optional[bool], userVotedUp: Optional[bool], 
+                 postDeleted: bool, **kwargs):
         self.id = id                                # ID of comment
-        self.post_id = post_id                      # Post ID the comment is on
-        self.post_public_id = post_public_id        # Public post ID (discuit.com/postID)
-        self.community_id = community_id            # Community ID comment is in
-        self.community_name = community_name        # Community Name
-        self.user_id = user_id                      # User ID who made the comment
+        self.post_id = postId                      # Post ID the comment is on
+        self.post_public_id = postPublicId        # Public post ID (discuit.com/postID)
+        self.community_id = communityId            # Community ID comment is in
+        self.community_name = communityName        # Community Name
+        self.user_id = userId                      # User ID who made the comment
         self.username = username                    # USername who made the comment
-        self.user_group = user_group                # Admin, mod, normal
-        self.user_deleted = user_deleted            # If author accoutn is deleted
-        self.parent_id = parent_id                  # Parent comment ID, can be null
+        self.user_group = userGroup                # Admin, mod, normal
+        self.user_deleted = userDeleted            # If author accoutn is deleted
+        self.parent_id = parentId                  # Parent comment ID, can be null
         self.depth = depth                          # Top-most comments have depth of 0
-        self.no_replies = no_replies                # Total number of replies to the comment
-        self.no_replies_direct = no_replies_direct  # Number of direct replies
+        self.no_replies = noReplies                # Total number of replies to the comment
+        self.no_replies_direct = noRepliesDirect  # Number of direct replies
         self.ancestors = ancestors                  # List of comment IDs, starting at topmost
         self.body = body                            # Comment body
         self.upvotes = upvotes                      # Number of up
         self.downvotes = downvotes                  # Number of down
-        self.created_at = created_at                # Datetime it was created
-        self.edited_at = edited_at                  # Datetime edited, can be null
-        self.deleted_at = deleted_at                # Datetime deleted, can be null
-        self.user_voted = user_voted                # If currently auth'd user voted 
-        self.user_voted_up = user_voted_up          # If auth user voteed up
-        self.post_deleted = post_deleted            # If the post the comment is on is delted
+        self.created_at = createdAt                # Datetime it was created
+        self.edited_at = editedAt                  # Datetime edited, can be null
+        self.deleted_at = deletedAt                # Datetime deleted, can be null
+        self.user_voted = userVoted                # If currently auth'd user voted 
+        self.user_voted_up = userVotedUp          # If auth user voteed up
+        self.post_deleted = postDeleted            # If the post the comment is on is delted
         self.__dict__.update(kwargs)
 
 

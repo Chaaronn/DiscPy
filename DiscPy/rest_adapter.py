@@ -110,6 +110,9 @@ class RestAdapter:
     def delete(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         return self._do(http_method='DELETE', endpoint=endpoint, ep_params=ep_params, data=data)
     
+    def put(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+        return self._do(http_method='PUT', endpoint=endpoint, ep_params=ep_params, data=data)
+    
     def fetch_data(self, url:str) -> bytes:
         #GET URL 
         http_method = 'GET'
@@ -135,9 +138,8 @@ class RestAdapter:
         except requests.exceptions.RequestException as e:
             raise DiscuitAPIException("Request for login headers failed") from e
 
-        cookie_str = result.headers['Set-Cookie'].split(';')[0]
         self._auth_headers = {
-            'Cookie' : cookie_str,
+            'Cookie' : result.headers['Set-Cookie'].split(';')[0],
             'X-Csrf-Token' : result.headers['Csrf-Token'],
             'Content-Type' : 'application/json'
         }
