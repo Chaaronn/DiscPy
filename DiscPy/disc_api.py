@@ -31,7 +31,11 @@ class DiscuitAPI:
         Returns:
             Posts: A list of Post objects.
         """
-        result = self._rest_adapter.get(endpoint=f'posts?communityID={community_id}')
+        params = {
+            "communityId" : community_id
+        }
+
+        result = self._rest_adapter.get(endpoint=f'posts', ep_params=params)
         posts = Posts(**result.data)
         return posts
     
