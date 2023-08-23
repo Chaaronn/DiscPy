@@ -6,12 +6,15 @@ Thanks to Snocrash and headzoo for sorting out authentication.
 
 
 ## Installation
+
+#### Pip
+
 ```
 pip install DiscPy
 ```
 KNOWN ISSUE with utilising after this install. This is my first attempt at a package, and it has missed off the "rest_adapater" file. I currently cannot push more updates.
 
-Alternative:
+#### Alternative:
 
 Clone the repo and import disc_api.py 
 
